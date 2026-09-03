@@ -1,4 +1,6 @@
-# AML Transaction Monitoring — False-Positive Reduction Using Data Analytics
+# Dissertation  
+## AML Transaction Monitoring — False-Positive Reduction Using Data Analytics
+### Supervisor Joshua Thompson
 
 Cost-sensitive ML pipeline for AML alert triage vs. a rule-based baseline, with SHAP
 explainability. MSc Big Data with Banking and Finance — Research Skills for Computing (55-710248).
