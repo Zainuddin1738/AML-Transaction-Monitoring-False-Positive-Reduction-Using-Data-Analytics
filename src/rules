@@ -1,0 +1,75 @@
+"""
+Rule-based AML alert logic -- reusable module.
+
+Final version, matching the thresholds used in 02_rule_baseline_full_v2.py:
+regulatory-anchored high_value/structuring thresholds, fixed velocity threshold,
+and an empirically-informed (not conventional-wisdom) high-risk format list.
+
+See notebooks/02_rule_based_baseline.ipynb for the full derivation, including the
+percentile-calibration attempt that was tried first and didn't work.
+"""
+
+import pandas as pd
+
+
+def flag_high_value(df: pd.DataFrame, threshold: float = 10_000) -> pd.Series:
+    """US Currency Transaction Report (CTR) threshold -- a real regulatory number."""
+    return df["Amount Paid"] > threshold
+
+
+def flag_structuring(df: pd.DataFrame, lower: float = 9_000, upper: float = 10_000) -> pd.Series:
+    """Amount just under the reporting threshold -- classic structuring/smurfing pattern."""
+    return (df["Amount Paid"] >= lower) & (df["Amount Paid"] < upper)
+
+
+def flag_high_velocity(df: pd.DataFrame, window: str = "24h", min_txns: int = 10) -> pd.Series:
+    """Fixed, domain-reasoned threshold: >= min_txns from one account within `window`."""
+    tmp = df[["From Account", "Timestamp"]].copy()
+    tmp["ones"] = 1
+    tmp = tmp.sort_values(["From Account", "Timestamp"])
+    counts = (
+        tmp.set_index("Timestamp")
+           .groupby("From Account")["ones"]
+           .rolling(window)
+           .sum()
+           .reset_index(drop=True)
+    )
+    tmp = tmp.reset_index(drop=True)
+    tmp["count"] = counts
+    flags = tmp["count"] >= min_txns
+    result = pd.Series(False, index=df.index)
+    result.iloc[tmp.index.values] = flags.values
+    return result
+
+
+def flag_round_amount(df: pd.DataFrame, multiple: float = 1_000) -> pd.Series:
+    """Exact multiple of `multiple` -- weak heuristic, included for completeness."""
+    return (df["Amount Paid"] % multiple == 0) & (df["Amount Paid"] > 0)
+
+
+def flag_high_risk_format(df: pd.DataFrame, formats=("ACH",)) -> pd.Series:
+    """
+    Empirically-informed, NOT the conventional Bitcoin/Cash assumption.
+    ACH has ~7x the dataset's average laundering rate; Bitcoin and Cash are both
+    BELOW average here -- see notebooks/01_data_cleaning.ipynb, Section 5.
+    """
+    return df["Payment Format"].isin(formats)
+
+
+RULE_REGISTRY = {
+    "high_value": flag_high_value,
+    "structuring": flag_structuring,
+    "high_velocity": flag_high_velocity,
+    "round_amount": flag_round_amount,
+    "high_risk_format": flag_high_risk_format,
+}
+
+
+def apply_all_rules(df: pd.DataFrame, rules: dict = None) -> pd.DataFrame:
+    """Apply each rule and combine with OR logic (matches how real rule-based AML systems combine independent rules)."""
+    rules = rules or RULE_REGISTRY
+    out = pd.DataFrame(index=df.index)
+    for name, fn in rules.items():
+        out[name] = fn(df)
+    out["alert"] = out.any(axis=1)
+    return out
