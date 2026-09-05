@@ -64,7 +64,7 @@ why, rather than only showing the final polished result.
 - **Cost-based evaluation** (using real transaction amounts): a more modest but still real 1.5-1.6x total cost reduction — smaller than the alert-volume figure, because ML's misses skew toward larger, non-ACH-format transactions
 - **SHAP confirms the mechanism**: `amount_paid` actively works *against* detection for non-ACH laundering cases, explaining the cost-evaluation finding precisely
 
-## Limitations (stated explicitly, not hidden)
+## Limitations
 
 - Single dataset variant (HI-Small) — see risk register / variant justification
 - No hyperparameter tuning, no cross-validation, no bootstrap confidence intervals — time-constrained scope decision
