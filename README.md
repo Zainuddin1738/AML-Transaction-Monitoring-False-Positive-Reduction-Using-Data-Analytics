@@ -1,9 +1,9 @@
 # Dissertation  
-## AML Transaction Monitoring — False-Positive Reduction Using Data Analytics
+## AML Transaction Monitoring False-Positive Reduction Using Data Analytics
 ### Supervisor Joshua Thompson
 
 Cost-sensitive ML pipeline for AML alert triage vs. a rule-based baseline, with SHAP
-explainability. MSc Big Data with Banking and Finance — Research Skills for Computing (55-710248).
+explainability. MSc Big Data with Banking and Finance Research Skills for Computing (55-710248).
 
 ## Research question
 
@@ -58,20 +58,20 @@ why, rather than only showing the final polished result.
 ## Key findings
 
 - **HI-Small variant**, justified against the other 5 IBM AMLworld variants (`01_data_cleaning.ipynb`, Section 10)
-- **Rule-based baseline**: 51.4% alert rate, 90.7% recall, 0.16% precision — realistic of real-world AML alert fatigue
-- **ACH, not Bitcoin/Cash**, is the strongest single laundering signal in this dataset — counter to conventional assumption
+- **Rule-based baseline**: 51.4% alert rate, 90.7% recall, 0.16% precision realistic of real-world AML alert fatigue
+- **ACH, not Bitcoin/Cash**, is the strongest single laundering signal in this dataset counter to conventional assumption
 - **Cost-sensitive XGBoost**: ~5.2x fewer alerts than the baseline at default threshold (87.2% recall); ~2.1x fewer at matched recall
-- **Cost-based evaluation** (using real transaction amounts): a more modest but still real 1.5-1.6x total cost reduction — smaller than the alert-volume figure, because ML's misses skew toward larger, non-ACH-format transactions
+- **Cost-based evaluation** (using real transaction amounts): a more modest but still real 1.5-1.6x total cost reduction smaller than the alert-volume figure, because ML's misses skew toward larger, non-ACH-format transactions
 - **SHAP confirms the mechanism**: `amount_paid` actively works *against* detection for non-ACH laundering cases, explaining the cost-evaluation finding precisely
 
 ## Limitations
 
-- Single dataset variant (HI-Small) — see risk register / variant justification
-- No hyperparameter tuning, no cross-validation, no bootstrap confidence intervals — time-constrained scope decision
-- Cost model uses an illustrative per-alert review cost ($30) — adjust/cite from literature if a more precise figure is available
-- Practitioner validation (Objective 7) — separate qualitative strand, tracked independently
+- Single dataset variant (HI-Small) see risk register / variant justification
+- No hyperparameter tuning, no cross-validation, no bootstrap confidence intervals time-constrained scope decision
+- Cost model uses an illustrative per-alert review cost ($30) adjust/cite from literature if a more precise figure is available
+- Practitioner validation (Objective 7) separate qualitative strand, tracked independently
 
 ## AI Declaration
 
-AITS Level 2 (AI for Shaping) — outputs independently reviewed, critically assessed, and
+AITS Level 2 (AI for Shaping) outputs independently reviewed, critically assessed, and
 substantially revised. Research design, analysis, and academic arguments are the author's own.
