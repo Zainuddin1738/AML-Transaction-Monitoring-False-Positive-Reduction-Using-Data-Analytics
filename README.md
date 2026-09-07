@@ -20,7 +20,7 @@ pip install -r requirements.txt
 
 1. Download `HI-Small_Trans.csv` from the [Kaggle dataset](https://www.kaggle.com/datasets/ealtman2019/ibm-transactions-for-anti-money-laundering-aml)
 2. Place it in `data/raw/HI-Small_Trans.csv`
-3. Run the scripts in `local_scripts/` in order (see below) — each prints a `SUMMARY` block used to
+3. Run the scripts in `local_scripts/` in order (see below)  each prints a `SUMMARY` block used to
    build the corresponding notebook
 
 ## Project structure
